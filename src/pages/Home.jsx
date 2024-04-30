@@ -5,16 +5,13 @@ import Island from '../models/Island'
 import Sky from '../models/Sky'
 import Bird from '../models/Bird'
 import Plane from '../models/Plane'
+import HomeInfo from '../components/HomeInfo'
 
 // Build your scene declaratively with re-usable, self-contained components that react to state, are readily interactive and can participate in React's ecosystem.
-
-{/* <div className='absolute top-28 left-0 right-0 z-10 flex items-center justify-center'>
-        POPUP // Top part that shows the active area
-      </div> */}
-
 const Home = () => {
 
   const [isRotating, setIsRotating] = useState(false);
+  const [currentStage, setCurrentStage] = useState(1);
 
   const adjustIslandForScreenSize = () => {
     let screenScale = null;
@@ -47,6 +44,10 @@ const Home = () => {
     // w-full => 100% of width
     // h-screen => 100vh of screen
     <section className='w-full h-screen relative'>
+      <div className='absolute top-28 left-0 right-0 z-10 flex items-center justify-center'> 
+        {/* // Top part that shows the active area */}
+        {currentStage && <HomeInfo currentStage={currentStage} />}
+      </div>
       {/* Canvas is a root component that sets up our entire 3D scene. */}
       <Canvas 
         className={`w-full h-screen bg-transparent ${isRotating ? 'cursor-grabbing' : 'cursor-grab'}`}
@@ -80,13 +81,14 @@ const Home = () => {
           {/* hemisphereLight -> It illuminates the scene with the gradient color. */}
           <hemisphereLight skyColor="#b1e1ff" groundColor={"#000000"} intensity={1} />
           <Bird />
-          <Sky />
+          <Sky isRotating={isRotating} />
           <Island
             position={islandPosition}
             scale={islandScale}
             rotation={islandRotation}
             isRotating={isRotating}
             setIsRotating={setIsRotating}
+            setCurrentStage={setCurrentStage}
           />
           <Plane 
             planePosition={planePosition}
